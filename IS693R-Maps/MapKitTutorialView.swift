@@ -29,7 +29,7 @@ struct MapKitTutorialView: View {
     
     var body: some View {
         
-        Map(position: $position, selection: $selectedResult) {
+        Map(position: $position, selection: $selectedFeature) {
             Annotation("Parking", coordinate: .parking) {
                 ZStack {
                     RoundedRectangle(cornerRadius: 5)
@@ -62,7 +62,6 @@ struct MapKitTutorialView: View {
                 MapKitTutorialSearch(searchResults: $searchResults, visibleRegion: visibleRegion)
                 if let selectedResult {
                     SelectedItemView(selectedResult: selectedResult, route: route)
-//                        
                 }
             }
             .sheet(isPresented: $showDetailsSheet) {
@@ -77,20 +76,42 @@ struct MapKitTutorialView: View {
         // .mapItemDetailSheet(item: $selectedResult)
         
         
-//        .onChange(of: selectedFeature) { previous, current in
-//            print("Current \(current)")
-//            guard let feature = current else { return }
-//            print(feature)
+        .onChange(of: selectedFeature) { previous, current in
+            guard let feature = current else { return }
+//            print(feature.coordinate)
+            Task {
+                let request =  MKMapItemRequest(feature: feature)
+                
+                request.getMapItem { mapItem, error in
+                    if let error = error {
+                        print("Error fetching MKMapItem: \(error.localizedDescription)")
+                        return
+                    }
+                    if let mapItem = mapItem {
+                        print("MAP ITEM FOUND: \(mapItem)")
+                        print("Name: \(mapItem.name ?? "No name")")
+                        print("Phone: \(mapItem.phoneNumber ?? "No phone number")")
+                        print("URL: \(mapItem.url?.absoluteString ?? "No URL")")
+                        print("Address: \(mapItem.placemark.country ?? "No country")")
+                        showDetailsSheet = true
+                        selectedResult = mapItem
+                    } else {
+                        print("No map item found.")
+                    }
+                }
+                
+            }
+            
 //            let selectedMKItem = MKMapItem(placemark: MKPlacemark(coordinate: feature.coordinate))
-////            showSheet = false
 //            print("Name: \(selectedMKItem.name ?? "No name")")
-//        }
+        }
         
         .onChange(of: searchResults) {
             position = .automatic
         }
         .onChange(of: selectedResult) {
             //            getDirections()
+            
             if let selectedResult {
                 print(selectedResult)
                 showDetailsSheet = true
