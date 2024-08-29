@@ -6,12 +6,15 @@
 //
 
 import SwiftUI
+import SwiftData
 import MapKit
 
 struct SelectedItemView: View {
+    @Environment(ViewModel.self) private var viewModel
     @State private var lookAroundScene: MKLookAroundScene?
     var selectedResult: MKMapItem
     var route: MKRoute?
+    
     
     private var travelTime: String? {
         guard let route else { return nil }
@@ -102,6 +105,20 @@ struct SelectedItemView: View {
                 ToolbarItem(placement: .primaryAction) {
                     Button {
                         print("Marked as visited...")
+                        let destination = Destination(
+                            dateVisited: Date.now,
+                            name: selectedResult.name ?? "Unknown Location",
+                            address: selectedResult.placemark.thoroughfare ?? "Unknown Address",
+                            city: selectedResult.placemark.locality ?? "Unknown City",
+                            country: selectedResult.placemark.country ?? "Unknown Country",
+                            latitude: selectedResult.placemark.location?.coordinate.latitude ?? 0.0,
+                            longitude: selectedResult.placemark.location?.coordinate.longitude ?? 0.0
+                        )
+                        viewModel.addDestination(destination)
+                        viewModel.destinations.forEach { dest in
+                            print(dest.name)
+                        }
+                        
                     } label: {
                         Image(systemName: "plus.circle")
 //                            .foregroundStyle(.black)
@@ -115,10 +132,30 @@ struct SelectedItemView: View {
         .presentationDetents([.height(80), .medium, .large])
         .presentationBackground(.regularMaterial)
         .presentationBackgroundInteraction(.enabled(upThrough: .large))
+        .environment(viewModel)
         
     }
 }
 
+//#Preview {
+//    SelectedItemView(selectedResult: MKMapItem(placemark: MKPlacemark(coordinate: CLLocationCoordinate2D(latitude: 42.35549591, longitude: -71.06139420))))
+//}
+
 #Preview {
-    SelectedItemView(selectedResult: MKMapItem(placemark: MKPlacemark(coordinate: CLLocationCoordinate2D(latitude: 42.35549591, longitude: -71.06139420))))
+    let container = { () -> ModelContainer in
+        do {
+            return try ModelContainer(
+                for: Destination.self,
+                configurations: ModelConfiguration(isStoredInMemoryOnly: true)
+            )
+        } catch {
+            fatalError("Failed to create ModelContainer for Items.")
+        }
+    }()
+    
+    let viewModel = ViewModel(container.mainContext)
+    
+    return SelectedItemView(selectedResult: MKMapItem(placemark: MKPlacemark(coordinate: CLLocationCoordinate2D(latitude: 42.35549591, longitude: -71.06139420))))
+        .modelContainer(container)
+        .environment(viewModel)
 }

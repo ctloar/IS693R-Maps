@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftData
+import MapKit
 
 @Observable
 class ViewModel {
@@ -175,9 +176,11 @@ class ViewModel {
         dateVisited: Date,
         address: String,
         city: String,
-        country: String
+        country: String,
+        coordinate: CLLocationCoordinate2D
+//        mapItem: MKMapItem
     ) {
-        let destination = Destination(dateVisited: dateVisited, name: name, address: address, city: city, country: country)
+        let destination = Destination(dateVisited: dateVisited, name: name, address: address, city: city, country: country, latitude: coordinate.latitude, longitude: coordinate.longitude)
 
 //        dependentTitles.forEach {
 //            let dependentItem = DependentItem(title: $0)

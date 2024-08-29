@@ -56,7 +56,7 @@ struct MapKitTutorialSearch: View {
     func search(for query: String) {
         let request = MKLocalSearch.Request()
         request.naturalLanguageQuery = query
-        request.resultTypes = [.physicalFeature, .pointOfInterest]
+        request.resultTypes = [.address, .physicalFeature, .pointOfInterest]
         request.region = visibleRegion ?? MKCoordinateRegion(
             center: .parking,
             span: MKCoordinateSpan(latitudeDelta: 0.0125, longitudeDelta: 0.0125)
