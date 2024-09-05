@@ -85,14 +85,13 @@ struct MapKitTutorialView: View {
         // https://www.hackingwithswift.com/quick-start/swiftui/how-to-present-multiple-sheets#:~:text=If%20you%20want%20to%20show,to%20the%20same%20parent%20view.&text=Using%20this%20approach%2C%20both%20sheets%20will%20be%20displayed%20correctly.
         .sheet(isPresented: $showSearchSheet) {
             VStack {
-                MapKitTutorialSearch(searchResults: $searchResults, visibleRegion: visibleRegion)
+                MapKitTutorialSearch(searchResults: searchResults, visibleRegion: visibleRegion)
             }
             .sheet(isPresented: $showDetailsSheet) {
                 if let selectedResult {
                     SelectedItemView(selectedResult: selectedResult, route: route)
                 }
             }
-            // TODO: Add another sheet here for Trips
         }
         
         // This sheet is for displaying information of a selected point of interest

@@ -16,6 +16,7 @@ final class Destination {
     var city: String
     var country: String
     // var identifier: String
+    // var trips: [Trip] = []
     var latitude: Double
     var longitude: Double
     

@@ -37,6 +37,7 @@ class ViewModel {
     private(set) var filteredItems: [Item] = []
     private(set) var items: [Item] = []
     private(set) var destinations: [Destination] = []
+    // private(set) var trips: [Trip] = []
 
     // MARK: - User intents
 
@@ -63,6 +64,11 @@ class ViewModel {
         // Because the ModelContext changed, we need to re-fetch
         fetchData()
     }
+    
+    func addTrip(_ trip: Trip) {
+        modelContext.insert(trip)
+        fetchData()
+    }
 
 //    func deleteIndependentItem(_ item: IndependentItem) {
 //        modelContext.delete(item)
@@ -84,28 +90,41 @@ class ViewModel {
         // Because the ModelContext changed, we need to re-fetch
         fetchData()
     }
+    
+    func deleteTrip(_ trip: Trip) {
+        modelContext.delete(trip)
+        fetchData()
+    }
 
     func replaceAllItems(
 //        _ items: [Item],
 //        _ independentItems: [IndependentItem],
-        _ destinations: [Destination]
-//        _ associations: [(String, String)]
+        _ trips: [Trip],
+        _ destinations: [Destination],
+        _ associations: [(String, String)]
     ) throws {
         do {
 //            try modelContext.delete(model: Item.self)
             try modelContext.delete(model: Destination.self)
 //            try modelContext.delete(model: IndependentItem.self)
+            try modelContext.delete(model: Trip.self)
         } catch {
             throw error
         }
 
 //        var itemTable: [String : Item] = [:]
 //        var independentItemTable: [String : IndependentItem] = [:]
+        var tripTable: [String: Trip] = [:]
         var destinationTable: [String: Destination] = [:]
         
         destinations.forEach { dest in
             destinationTable[dest.name] = dest
             modelContext.insert(dest)
+        }
+        
+        trips.forEach { trip in
+            tripTable[trip.title] = trip
+            modelContext.insert(trip)
         }
 
 //        items.forEach { item in
@@ -118,15 +137,15 @@ class ViewModel {
 //            modelContext.insert(item)
 //        }
 
-//        associations.forEach { (tool, color) in
-//            if let toolItem = itemTable[tool], let colorItem = independentItemTable[color] {
-//                // We just need to append the IndependentItem onto the array of the
-//                // corresponding Item's independentItems (or vice versa).  This
-//                // creates the many-to-many association in the database.
-//
-//                toolItem.independentItems.append(colorItem)
-//            }
-//        }
+        associations.forEach { (trip, destination) in
+            if let destObj = destinationTable[destination], let tripObj = tripTable[trip] {
+                // We just need to append the IndependentItem onto the array of the
+                // corresponding Item's independentItems (or vice versa).  This
+                // creates the many-to-many association in the database.
+
+                tripObj.destinations.append(destObj)
+            }
+        }
 
         fetchData()
     }
