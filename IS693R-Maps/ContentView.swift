@@ -14,6 +14,9 @@ struct ContentView: View {
 
     var body: some View {
         NavigationSplitView {
+//            NavigationLink("Go to map") {
+//                MapKitTutorialView()
+//            }
             List {
                 ForEach(items) { item in
                     NavigationLink {

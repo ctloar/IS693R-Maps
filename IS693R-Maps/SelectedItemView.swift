@@ -111,8 +111,8 @@ struct SelectedItemView: View {
                             address: selectedResult.placemark.thoroughfare ?? "Unknown Address",
                             city: selectedResult.placemark.locality ?? "Unknown City",
                             country: selectedResult.placemark.country ?? "Unknown Country",
-                            latitude: selectedResult.placemark.location?.coordinate.latitude ?? 0.0,
-                            longitude: selectedResult.placemark.location?.coordinate.longitude ?? 0.0
+                            identifier: selectedResult.identifier?.rawValue ?? "unknown",
+                            trips: []
                         )
                         viewModel.addDestination(destination)
                         viewModel.destinations.forEach { dest in
@@ -122,6 +122,23 @@ struct SelectedItemView: View {
                     } label: {
                         Image(systemName: "plus.circle")
 //                            .foregroundStyle(.black)
+                    }
+                }
+                ToolbarItem {
+                    Button {
+                        let destination = Destination(
+                            dateVisited: Date.now,
+                            name: selectedResult.name ?? "Unknown Location",
+                            address: selectedResult.placemark.thoroughfare ?? "Unknown Address",
+                            city: selectedResult.placemark.locality ?? "Unknown City",
+                            country: selectedResult.placemark.country ?? "Unknown Country",
+                            identifier: selectedResult.identifier?.rawValue ?? "unknown",
+                            trips: [favorites]
+                        )
+                        // add destination to trip
+                        print("saved to favorites!")
+                    } label: {
+                        Image(systemName: "heart")
                     }
                 }
             }

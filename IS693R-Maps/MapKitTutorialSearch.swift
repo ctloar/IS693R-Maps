@@ -19,10 +19,10 @@ struct MapKitTutorialSearch: View {
     
     @Environment(ViewModel.self) private var viewModel
     // Change back to @Binding when auto complete search is ready
-    @State var searchResults: [MKMapItem]
+    @Binding var searchResults: [MKMapItem]
     @State var searchString: String = ""
     var visibleRegion: MKCoordinateRegion?
-    @State private var displayTrips: Bool = false
+    @State private var displayTrip: Trip?
     @State var trips: [Trip] = []
     
     var body: some View {
@@ -41,10 +41,10 @@ struct MapKitTutorialSearch: View {
             
             List {
                 Section {
-                    ForEach(searchResults, id: \.self) { item in
+                    ForEach(viewModel.trips, id: \.self) { trip in
                         HStack {
-                            Button(item.name ?? "Unknown Location") {
-                                displayTrips = true
+                            Button(trip.title) {
+                                displayTrip = trip
                             }
                             Spacer()
                             Image(systemName: "chevron.right")
@@ -63,19 +63,21 @@ struct MapKitTutorialSearch: View {
         .interactiveDismissDisabled()
         .presentationDetents([.height(80), .medium, .fraction(0.999)])
         .presentationBackgroundInteraction(.enabled(upThrough: .fraction(0.999)))
-        .sheet(isPresented: $displayTrips) {
+        .sheet(item: $displayTrip) { trip in
             VStack {
                 List {
-//                    ForEach(destinations)
+                    ForEach(trip.destinations) { dest in
+                        Text(dest.name)
+                    }
                 }
             }
             .presentationDetents([.medium])
             .presentationBackgroundInteraction(.enabled(upThrough: .large))
         }
-        .task{
-            print("Loading trips to display them on the search sheet...")
+//        .task{
+//            print("Loading trips to display them on the search sheet...")
 //            trips = viewModel.trips
-        }
+//        }
         .environment(viewModel)
         
     }
@@ -98,21 +100,21 @@ struct MapKitTutorialSearch: View {
     }
 }
 
-#Preview {
-    let container = { () -> ModelContainer in
-        do {
-            return try ModelContainer(
-                for: Destination.self,
-                configurations: ModelConfiguration(isStoredInMemoryOnly: true)
-            )
-        } catch {
-            fatalError("Failed to create ModelContainer for Items.")
-        }
-    }()
-    
-    let viewModel = ViewModel(container.mainContext)
-    
-    return MapKitTutorialSearch(searchResults: [MKMapItem(placemark: MKPlacemark(coordinate: CLLocationCoordinate2D(latitude: 42.35549591, longitude: -71.06139420)))])
-        .modelContainer(container)
-        .environment(viewModel)
-}
+//#Preview {
+//    let container = { () -> ModelContainer in
+//        do {
+//            return try ModelContainer(
+//                for: Destination.self,
+//                configurations: ModelConfiguration(isStoredInMemoryOnly: true)
+//            )
+//        } catch {
+//            fatalError("Failed to create ModelContainer for Items.")
+//        }
+//    }()
+//    
+//    let viewModel = ViewModel(container.mainContext)
+//    
+//    return MapKitTutorialSearch(searchResults: [MKMapItem(placemark: MKPlacemark(coordinate: CLLocationCoordinate2D(latitude: 42.35549591, longitude: -71.06139420)))])
+//        .modelContainer(container)
+//        .environment(viewModel)
+//}

@@ -68,7 +68,7 @@ struct MapKitTutorialView: View {
             ForEach(searchResults.indices) { index in
                 Marker(item: searchResults[index])
                         .tag(MapSelection(index))
-                }
+            }
 //            }
             
 //            .annotationTitles(.hidden)
@@ -85,7 +85,7 @@ struct MapKitTutorialView: View {
         // https://www.hackingwithswift.com/quick-start/swiftui/how-to-present-multiple-sheets#:~:text=If%20you%20want%20to%20show,to%20the%20same%20parent%20view.&text=Using%20this%20approach%2C%20both%20sheets%20will%20be%20displayed%20correctly.
         .sheet(isPresented: $showSearchSheet) {
             VStack {
-                MapKitTutorialSearch(searchResults: searchResults, visibleRegion: visibleRegion)
+                MapKitTutorialSearch(searchResults: $searchResults, visibleRegion: visibleRegion)
             }
             .sheet(isPresented: $showDetailsSheet) {
                 if let selectedResult {
@@ -141,6 +141,7 @@ struct MapKitTutorialView: View {
         
         .onChange(of: searchResults) {
             position = .automatic
+            print(searchResults)
         }
         .onMapCameraChange { context in
             visibleRegion = context.region

@@ -15,18 +15,17 @@ final class Destination {
     var address: String
     var city: String
     var country: String
-    // var identifier: String
-    // var trips: [Trip] = []
-    var latitude: Double
-    var longitude: Double
+    var identifier: String
+    @Relationship(inverse: \Trip.destinations)
+    var trips: [Trip] = []
     
-    init(dateVisited: Date, name: String, address: String, city: String, country: String, latitude: Double, longitude: Double) {
+    init(dateVisited: Date, name: String, address: String, city: String, country: String, identifier: String, trips: [Trip]) {
         self.dateVisited = dateVisited
         self.name = name
         self.address = address
         self.city = city
         self.country = country
-        self.latitude = latitude
-        self.longitude = longitude
+        self.identifier = identifier
+        self.trips = trips
     }
 }

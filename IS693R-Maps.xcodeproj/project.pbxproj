@@ -18,6 +18,7 @@
 		289DFA8A2C6BD793005C20DD /* SelectedItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 289DFA892C6BD793005C20DD /* SelectedItemView.swift */; };
 		28A2AA962C7AA5B10057599E /* ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28A2AA952C7AA5AA0057599E /* ViewModel.swift */; };
 		28AB4A5D2C77EFEF008B732F /* Destination.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28AB4A5C2C77EFD4008B732F /* Destination.swift */; };
+		28F21FA72C8A38AA00C9562A /* SampleData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28F21FA62C8A38A400C9562A /* SampleData.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -33,6 +34,7 @@
 		289DFA892C6BD793005C20DD /* SelectedItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectedItemView.swift; sourceTree = "<group>"; };
 		28A2AA952C7AA5AA0057599E /* ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModel.swift; sourceTree = "<group>"; };
 		28AB4A5C2C77EFD4008B732F /* Destination.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Destination.swift; sourceTree = "<group>"; };
+		28F21FA62C8A38A400C9562A /* SampleData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleData.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -65,12 +67,13 @@
 		284CA99B2C6AC19D0057B981 /* IS693R-Maps */ = {
 			isa = PBXGroup;
 			children = (
+				28F21FA52C8A389900C9562A /* Data */,
 				28A2AA942C7AA57F0057599E /* ViewModel */,
 				284CA9AC2C6AC2120057B981 /* Views */,
-				284CA99C2C6AC19D0057B981 /* IS693R_MapsApp.swift */,
 				28AB4A5B2C77ECEC008B732F /* Model */,
-				284CA9A22C6AC19F0057B981 /* Assets.xcassets */,
 				284CA9A42C6AC19F0057B981 /* Preview Content */,
+				284CA9A22C6AC19F0057B981 /* Assets.xcassets */,
+				284CA99C2C6AC19D0057B981 /* IS693R_MapsApp.swift */,
 			);
 			path = "IS693R-Maps";
 			sourceTree = "<group>";
@@ -110,6 +113,14 @@
 				2873A1722C83754500D2BA26 /* Trip.swift */,
 			);
 			path = Model;
+			sourceTree = "<group>";
+		};
+		28F21FA52C8A389900C9562A /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				28F21FA62C8A38A400C9562A /* SampleData.swift */,
+			);
+			path = Data;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -185,6 +196,7 @@
 				284CA99F2C6AC19D0057B981 /* ContentView.swift in Sources */,
 				284CA9AE2C6AC2340057B981 /* MapKitTutorialSearch.swift in Sources */,
 				284CA9B02C6AC24E0057B981 /* MapKitTutorialView.swift in Sources */,
+				28F21FA72C8A38AA00C9562A /* SampleData.swift in Sources */,
 				2873A1732C83754500D2BA26 /* Trip.swift in Sources */,
 				284CA9A12C6AC19D0057B981 /* Item.swift in Sources */,
 				289DFA8A2C6BD793005C20DD /* SelectedItemView.swift in Sources */,

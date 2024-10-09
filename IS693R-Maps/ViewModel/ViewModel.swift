@@ -37,7 +37,7 @@ class ViewModel {
     private(set) var filteredItems: [Item] = []
     private(set) var items: [Item] = []
     private(set) var destinations: [Destination] = []
-    // private(set) var trips: [Trip] = []
+     private(set) var trips: [Trip] = []
 
     // MARK: - User intents
 
@@ -172,7 +172,7 @@ class ViewModel {
 //            editDestination
             
         } else {
-//            createDestination
+//            createDestination(name: name, dateVisited: dateVisited, address: address, city: city, country: country, coordinate: )
         }
     }
 
@@ -191,15 +191,22 @@ class ViewModel {
 //    }
     
     private func createDestination(
-        name: String,
         dateVisited: Date,
+        name: String,
         address: String,
         city: String,
         country: String,
-        coordinate: CLLocationCoordinate2D
-//        mapItem: MKMapItem
+        identifier: String,
+        trips: [Trip]
     ) {
-        let destination = Destination(dateVisited: dateVisited, name: name, address: address, city: city, country: country, latitude: coordinate.latitude, longitude: coordinate.longitude)
+        let destination = Destination(
+            dateVisited: dateVisited,
+            name: name,
+            address: address,
+            city: city,
+            country: country,
+            identifier: identifier,
+            trips: trips)
 
 //        dependentTitles.forEach {
 //            let dependentItem = DependentItem(title: $0)
@@ -259,9 +266,8 @@ class ViewModel {
         // among several groups.  For example, if you have a table of items
         // that never or rarely changes, you might not include that in this
         // fetchData method
-//        fetchItems()
         fetchDestinations()
-//        fetchFilteredItems()
+        fetchTrips()
     }
 
 //    private func fetchFilteredItems() {
@@ -306,6 +312,17 @@ class ViewModel {
             destinations = try modelContext.fetch(descriptor)
         } catch {
             print("Failed to load destinations.")
+        }
+    }
+    
+    private func fetchTrips() {
+        do {
+            let descriptor = FetchDescriptor<Trip>(sortBy: [SortDescriptor(\.title)])
+            
+            trips = try modelContext.fetch(descriptor)
+            trips.append(favorites)
+        } catch {
+            print("Failed to load trips.")
         }
     }
 }
