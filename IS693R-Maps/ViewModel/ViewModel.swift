@@ -53,15 +53,12 @@ class ViewModel {
 
     func addItem(_ item: Item) {
         modelContext.insert(item)
-
         // Because the ModelContext changed, we need to re-fetch
         fetchData()
     }
     
     func addDestination(_ destination: Destination) {
         modelContext.insert(destination)
-
-        // Because the ModelContext changed, we need to re-fetch
         fetchData()
     }
     
@@ -79,15 +76,11 @@ class ViewModel {
 
     func deleteItem(_ item: Item) {
         modelContext.delete(item)
-
-        // Because the ModelContext changed, we need to re-fetch
         fetchData()
     }
     
     func deleteDestination(_ destination: Destination) {
         modelContext.delete(destination)
-
-        // Because the ModelContext changed, we need to re-fetch
         fetchData()
     }
     
@@ -97,23 +90,16 @@ class ViewModel {
     }
 
     func replaceAllItems(
-//        _ items: [Item],
-//        _ independentItems: [IndependentItem],
         _ trips: [Trip],
         _ destinations: [Destination],
         _ associations: [(String, String)]
     ) throws {
         do {
-//            try modelContext.delete(model: Item.self)
             try modelContext.delete(model: Destination.self)
-//            try modelContext.delete(model: IndependentItem.self)
             try modelContext.delete(model: Trip.self)
         } catch {
             throw error
         }
-
-//        var itemTable: [String : Item] = [:]
-//        var independentItemTable: [String : IndependentItem] = [:]
         var tripTable: [String: Trip] = [:]
         var destinationTable: [String: Destination] = [:]
         
@@ -126,16 +112,6 @@ class ViewModel {
             tripTable[trip.title] = trip
             modelContext.insert(trip)
         }
-
-//        items.forEach { item in
-//            itemTable[item.title] = item
-//            modelContext.insert(item)
-//        }
-
-//        independentItems.forEach { item in
-//            independentItemTable[item.title] = item
-//            modelContext.insert(item)
-//        }
 
         associations.forEach { (trip, destination) in
             if let destObj = destinationTable[destination], let tripObj = tripTable[trip] {

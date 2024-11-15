@@ -14,6 +14,10 @@ struct SelectedItemView: View {
     @State private var lookAroundScene: MKLookAroundScene?
     var selectedResult: MKMapItem
     var route: MKRoute?
+    @State private var displayTripsSheet: Bool = false
+    @State private var displayCreateTripModal: Bool = false
+    @State private var selectedDest: Destination?
+    @State private var newTripName: String = ""
     
     
     private var travelTime: String? {
@@ -114,14 +118,14 @@ struct SelectedItemView: View {
                             identifier: selectedResult.identifier?.rawValue ?? "unknown",
                             trips: []
                         )
-                        viewModel.addDestination(destination)
-                        viewModel.destinations.forEach { dest in
-                            print(dest.name)
-                        }
-                        
+//                        viewModel.addDestination(destination)
+//                        viewModel.destinations.forEach { dest in
+//                            print(dest.name)
+//                        }
+//                        displayTripsSheet = true
+                        selectedDest = destination
                     } label: {
                         Image(systemName: "plus.circle")
-//                            .foregroundStyle(.black)
                     }
                 }
                 ToolbarItem {
@@ -145,6 +149,30 @@ struct SelectedItemView: View {
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding([.leading, .vertical])
         }
+        .sheet(item: $selectedDest){ dest in
+            VStack {
+                List {
+                    ForEach(viewModel.trips) { trip in
+                        Button(trip.title) {
+                            dest.trips.append(trip)
+                            viewModel.addDestination(dest)
+                        }
+                    }
+                }
+                Button("Add new trip") {
+                    displayCreateTripModal = true
+                }
+            }
+            .alert("New Trip", isPresented: $displayCreateTripModal) {
+                TextField("Enter trip name", text: $newTripName)
+                Button("Save") {
+                    viewModel.addTrip(Trip(title: newTripName, timestamp: Date.now, destinations: []))
+                }
+                Button("Cancel", role: .cancel) { }
+            } message: {
+                Text("Enter a name for your new trip")
+            }
+        }
         .interactiveDismissDisabled()
         .presentationDetents([.height(80), .medium, .large])
         .presentationBackground(.regularMaterial)
@@ -152,6 +180,30 @@ struct SelectedItemView: View {
         .environment(viewModel)
         
     }
+    
+//    var tripsSheet: some View {
+//        VStack {
+//            List {
+//                ForEach(viewModel.trips) { trip in
+//                    Button(trip.title) {
+//                        
+//                    }
+//                }
+//            }
+//            Button("Add new trip") {
+//                displayCreateTripModal = true
+//            }
+//        }
+//        .alert("New Trip", isPresented: $displayCreateTripModal) {
+//            TextField("Enter trip name", text: $newTripName)
+//            Button("Save") {
+//                viewModel.addTrip(Trip(title: newTripName, timestamp: Date.now, destinations: []))
+//            }
+//            Button("Cancel", role: .cancel) { }
+//        } message: {
+//            Text("Enter a name for your new trip")
+//        }
+//    }
 }
 
 //#Preview {
